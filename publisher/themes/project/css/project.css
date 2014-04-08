@@ -1,0 +1,40 @@
+#overview_provider, #Version {
+    display: none;
+}
+#Version {
+    display: block;
+}
+#VersionControlType,#ProjectManagementToolType,#ContinuousIntegrationType,#IssueTrackerType {
+    display: none;
+}
+#Provider {
+    display: none;
+}
+
+#VersionControl,#VCSResourceID {
+    display: none;
+}
+
+#ProjectManagementTool,#PMSResourceID {
+    display: none;
+}
+
+#IssueTracker,#ISSResourceID {
+    display: none;
+}
+
+#ContinuousIntegration,#CISResourceID{
+    display: none;
+}
+
+#Tags, #tag-container {
+    display: block;
+}
+
+#toggle-action {
+    text-align: right;
+}
+
+
+
+

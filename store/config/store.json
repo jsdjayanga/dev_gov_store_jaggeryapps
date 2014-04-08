@@ -1,0 +1,25 @@
+﻿{
+    "assetsUrlPrefix": "/assets",
+    "extensionsUrlPrefix": "/extensions",
+    "subscriptionsUrlPrefix": "/subscriptions",
+    "tenantConfigs": "/_system/config/store/configs/store.json",
+    "socialCommentsEnable": true,
+    "cached": false,
+    "server": {
+        "https": "%https.host%/admin",
+        "http": "%http.host%"
+    },
+    "lifeCycleBehaviour":{
+        "visibleIn":["Published"]
+    },
+    "ssoConfiguration": {
+        "enabled": true,
+        "issuer": "StoreInES",
+        "identityProviderURL": "https://ec2-54-83-33-151.compute-1.amazonaws.com:9543/samlsso",
+        "keyStorePassword": "wso2carbon",
+        "identityAlias": "wso2carbon",
+        "responseSigningEnabled": "true",
+        "storeAcs" : "%https.host%/store/acs",
+        "keyStoreName": "/repository/resources/security/wso2carbon.jks"
+    }
+}

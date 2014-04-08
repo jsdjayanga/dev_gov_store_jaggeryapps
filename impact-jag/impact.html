@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    .node circle {
+        cursor: pointer;
+        stroke: #ffffff;
+        stroke-width: 2px;
+    }
+
+    .node text {
+        font: 12px arial;
+        pointer-events: none;
+        text-anchor: left;
+        text-align: left;
+        color: #222;
+        text-shadow: 0px 2px 3px #f0f1f0;
+    }
+
+    line.link {
+        fill: none;
+        stroke: #7302e1;
+        stroke-width: 1.5px;
+    }
+
+</style>
+<body>
+<script src="extern/d3.v3.min.js"></script>
+<script src="extern/jquery.min.js"></script>
+<script src="extern/jquery.noisy.min.js"></script>
+<script>
+
+    $('body').noisy({
+        'intensity' : 2,
+        'size' : '300',
+        'opacity' : 0.123,
+        'fallback' : '',
+        'monochrome' : true
+    }).css('background-color', '#faf6b4');
+
+    var imageScale = 0.9;
+
+    var width = 1400,
+            height = 800,
+            root;
+
+    var force = d3.layout.force()
+            .linkDistance(100)
+            .charge(-200)
+            .gravity(.01)
+            .size([width, height])
+            .on("tick", tick);
+
+    var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("pointer-events", "all")
+            .call(d3.behavior.zoom().on("zoom", redraw)).on("dblclick.zoom", null)
+            .append('g');
+
+   /* svg.append('rect')
+            .attr('width', 100)
+            .attr('height', height)
+            .attr('fill', 'white');*/
+
+    var link = svg.selectAll(".link"),
+            node = svg.selectAll(".node");
+
+    function redraw() {
+        svg.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+    }
+
+    d3.json("graphdata/graph.json", function(error, json) {
+        root = json;
+        update();
+    });
+
+    function update() {
+        var nodes = flatten(root),
+                links = d3.layout.tree().links(nodes);
+
+        // Restart the force layout.
+        force
+                .nodes(nodes)
+                .links(links)
+                .start();
+
+        // Update links.
+        link = link.data(links, function(d) { return d.target.id; });
+
+        link.exit().remove();
+
+        link.enter().insert("line", ".node")
+                .attr("class", "link");
+
+        // Update nodes.
+        node = node.data(nodes, function(d) { return d.id; });
+
+        node.exit().remove();
+
+        var nodeEnter = node.enter().append("g")
+                .attr("class", function (d) { return "node" + ('image' in d ? ' imagenode' : '') })
+                .on("click", click)
+                .call(force.drag);
+
+
+
+       /* nodeEnter.append("circle")
+                .attr("r", function(d) { return Math.sqrt(d.size) / 10 || 4.5; });*/
+
+        nodeEnter.append("circle")
+                .attr("cx", -5)
+                .attr("cy", 0)
+                .attr("r", 28)
+                .attr("fill",function(d) { return d.color; });
+
+        svg.selectAll(".imagenode")
+                .attr("class", "node")
+                .append("image")
+                .attr("x", -24)
+                .attr("y", -24)
+                .attr("xlink:href", function (d) {
+                    // var url = "graphdata/" + d['image'] + ".gif";
+                    var url = "graphdata/" + d['image'] ;
+                    var simg = this;
+                    var img = new Image();
+                    img.onload = function () {
+                        d.width = this.width * imageScale;
+                        d.height = this.height * imageScale;
+                        simg.setAttribute("width", d.width);
+                        simg.setAttribute("height", d.height);
+                    }
+                    return img.src = url;
+                })
+
+            /*   .on("click", function (d) { click })
+               .on("touchend", function (d) { click(d) })
+               .on("mouseover", function () { imageZoom(this, 1/imageScale) })
+               .on("touchend", function () { toggleImageZoom(this) })
+               .on("mouseout", function () { imageZoom(this, 1) })*/
+       ;
+
+           nodeEnter
+                .append("image")
+                .attr("x", -24)
+                .attr("y", -24)
+                .attr("xlink:href", function (d) {
+                    // var url = "graphdata/" + d['image'] + ".gif";
+                    var url = "graphdata/" + d['alertimage'] ;
+                    var simg = this;
+                    var img = new Image();
+                    img.onload = function () {
+                        d.width = this.width * imageScale;
+                        d.height = this.height * imageScale;
+                        simg.setAttribute("width", d.width);
+                        simg.setAttribute("height", d.height);
+                    }
+                    return img.src = url;
+                })
+        ;
+
+
+        nodeEnter.append("text")
+                .attr("dy", ".35em")
+                .attr("dx", "30")
+                .text(function(d) { return d.name; });
+
+
+    }
+
+    function tick() {
+        link.attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
+
+        node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    }
+
+    function color(d) {
+        return d._children ? "#3182bd" // collapsed package
+                : d.children ? "#c6dbef" // expanded package
+                : "#fd8d3c"; // leaf node
+    }
+
+    // Toggle children on click.
+    function click(d) {
+        if (d3.event.defaultPrevented) return; // ignore drag
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        update();
+    }
+
+    // Returns a list of all nodes under the root.
+    function flatten(root) {
+        var nodes = [], i = 0;
+
+        function recurse(node) {
+            if (node.children) node.children.forEach(recurse);
+            if (!node.id) node.id = ++i;
+            nodes.push(node);
+        }
+
+        recurse(root);
+        return nodes;
+    }
+
+    function imageZoom(img, scale) {
+        d3.select(img)
+                .transition()
+                .attr("width", function (d) {
+                    return scale * d.width;
+                })
+                .attr("height", function (d) { return scale * d.height; });
+    }
+
+
+
+</script>
