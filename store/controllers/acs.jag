@@ -22,25 +22,17 @@
 
     if (samlResponse != null) {
 
-	session.put("LOGGED_IN_USER", "appm");
-        session.put("Loged", "true");
-	log.info("In ACS");
-        response.sendRedirect(relayState);
-    }
-
-    if (false){//samlResponse != null) {
-
         //samlResponse = decodeURIComponent(samlResponse);
-        log.info(samlResponse);
+       
         samlRespObj = sso.client.getSamlObject(samlResponse);
         if (!sso.client.isLogoutResponse(samlRespObj)) {
-
+	
             // validating the signature
             if (configs.ssoConfiguration.responseSigningEnabled) {
 
                 if (sso.client.validateSignature(samlRespObj, keyStoreProps)) {
                     var sessionObj = sso.client.decodeSAMLLoginResponse(samlRespObj, samlResponse, sessionId);
-
+		    log.info("session object"+sessionObj);
                     if (sessionObj.sessionIndex != null || sessionObj.sessionIndex != 'undefined') {
                         session.put("LOGGED_IN_USER", sessionObj.loggedInUser);
                         session.put("Loged", "true");

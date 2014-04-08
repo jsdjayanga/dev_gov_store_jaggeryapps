@@ -30,7 +30,7 @@ var pubConfig=require('/config/publisher.js').config();
 Finished the parsing stuff
  */
 caramel.configs({
-    context: '/store',
+    context: '/devgovernance/1.0.0',
     cache: true,
     negotiation: true,
     themer: function () {

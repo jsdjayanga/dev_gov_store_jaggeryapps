@@ -4,34 +4,6 @@
 
 var caramel;
 
-var samlResponse = request.getHeader("AppMgtSAML2Response");
-
-if(false)//samlResponse!=null)
-{
-
-	session.put("APPM_SAML_RESPONSE", samlResponse );
-
-        %>
-
-                <div>
-
-                           
-                            <form method="post" action="https://apps.private.wso2.com/devgovernance/1.0.0/acs">
-                            <p>
-                               <input type="hidden" name="SAMLRequest" value="<%= samlResponse %>"/>
-                               <input type="hidden" name="RelayState" value="https://apps.private.wso2.com/devgovernance/1.0.0/"/>
-                           </p>
-                       </form>
-                   </div>
-                   <script type = "text/javascript" >
-                          document.forms[0].submit();
-                   </script>
-        <%
-	//var result = post('https://apps.private.wso2.com/devgovernance/1.0.0/acs', {SAMLResponse:samlResponse,RelayState:'https://apps.private.wso2.com/devgovernance/1.0.0/'});
-	//print(result.data);
-	//response.sendRedirect('/store/acs?SAMLResponse='+samlResponse+'&RelayState=/store');
-}
-
 require('/modules/store.js').exec(function (ctx) {
     var paging, count, current, loggedUser, manager, assets, length, recentDiff,
             popularDiff, recent, popular, type,
