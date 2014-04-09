@@ -1,5 +1,10 @@
 var render = function(theme, data, meta, require) {
-	//print(caramel.build(data));
+
+	var session = meta.session;
+
+	var appMSAMLResponse = session.get('APPM_SAML_RESPONSE');
+	data.asset.attributes['appMSAMLResponse'] = appMSAMLResponse;
+
 	theme('1-column', {
 		title : data.title,
 		

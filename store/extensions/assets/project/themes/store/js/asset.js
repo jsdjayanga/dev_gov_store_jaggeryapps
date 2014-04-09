@@ -1,4 +1,5 @@
 $(function () {
+
     var $tab = $('#tab-reviews');
     $('a').click(function(){
         var tab = $(this).data("type");

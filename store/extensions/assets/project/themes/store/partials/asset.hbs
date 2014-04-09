@@ -67,8 +67,8 @@
             <li>
                 <a href="#tab-code" data-toggle="tab" data-type="basic">{{t "Code Coverage"}}</a>
             </li>
-            <li class="active">
-                <a href="#tab-test" data-toggle="tab" data-type="basic">{{t "Test Status"}}</a>
+            <li id="tab-test-li">
+                <a  href="#tab-test" data-toggle="tab" data-type="basic">{{t "Test Status"}}</a>
             </li>
 
 
@@ -78,35 +78,65 @@
 
             <div class="tab-pane active" id="tab-source">
                 <div class="content">
-                    <div style="text-align:center;"><a class="btn btn-default" target="_blank" href="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/source-code-dashboard/?gitID={{overview_name}}"> Visit Source Coverage Dashboard </a>
+                    <div style="text-align:center;">
+				<form method="post" action="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/source-code-dashboard/?gitID={{overview_name}}">
+				    <p>
+					<input type="hidden" name="AppMgtSAML2Response" value="{{appMSAMLResponse}}"/>
+					<button type="submit" class="btn btn-default" formtarget="_blank"> Visit Source Coverage Dashboard</button>
+				    </p>
+				</form>
                     </div>
                     <iframe height=500px width="100%" src="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/gadgets/ifr?url=http://ec2-54-83-33-151.compute-1.amazonaws.com:9963/portal/gadgets/git-commit-summary/git-commit-summary.xml&onRemote=true&gitID={{overview_name}}"></iframe>
                 </div>
             </div>
             <div class="tab-pane " id="tab-commit">
                 <div class="content">
-                    <div style="text-align:center;"><a class="btn btn-default" target="_blank" href="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/source-code-dashboard/?gitID={{overview_name}}"> Visit Source Coverage Dashboard </a>
+                    <div style="text-align:center;">
+				<form method="post" action="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/source-code-dashboard/?gitID={{overview_name}}">
+				    <p>
+					<input type="hidden" name="AppMgtSAML2Response" value="{{appMSAMLResponse}}"/>
+					<button type="submit" class="btn btn-default" formtarget="_blank"> Visit Source Coverage Dashboard</button>
+				    </p>
+				</form>
                     </div>
                     <iframe height=500px width="100%" src="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/gadgets/ifr?url=http://ec2-54-83-33-151.compute-1.amazonaws.com:9963/portal/gadgets/git-project-summary/git-project-summary.xml&onRemote=true&gitID={{overview_name}}"></iframe>
                 </div>
             </div>
             <div class="tab-pane " id="tab-build">
                 <div class="content">
-                    <div style="text-align:center;"><a class="btn btn-default" target="_blank" href="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/build-dashboard/?jenkinsURL={{other_continuousIntegration}}"> Visit Build Coverage Dashboard </a>
+                    <div style="text-align:center;">
+				<form method="post" action="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/build-dashboard/?jenkinsURL={{other_continuousIntegration}}">
+				    <p>
+					<input type="hidden" name="AppMgtSAML2Response" value="{{appMSAMLResponse}}"/>
+					<button type="submit" class="btn btn-default" formtarget="_blank"> Visit Build Coverage Dashboard</button>
+				    </p>
+				</form>
                     </div>
                     <iframe height=500px width="100%" src="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/gadgets/ifr?url=http://ec2-54-83-33-151.compute-1.amazonaws.com:9963/portal/gadgets/jenkins-project-summary/jenkins-project-summary.xml&onRemote=true&jenkinsURL={{other_continuousIntegration}}"></iframe>
                 </div>
             </div>
             <div class="tab-pane " id="tab-code">
                 <div class="content">
-                    <div style="text-align:center;"><a class="btn btn-default" target="_blank" href="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/code-coverage-dashboard/?jenkinsURL={{other_continuousIntegration}}"> Visit Code Coverage Dashboard </a>
+                    <div style="text-align:center;">
+				<form method="post" action="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/code-coverage-dashboard/?jenkinsURL={{other_continuousIntegration}}">
+				    <p>
+					<input type="hidden" name="AppMgtSAML2Response" value="{{appMSAMLResponse}}"/>
+					<button type="submit" class="btn btn-default" formtarget="_blank">Visit Code Coverage Dashboard</button>
+				    </p>
+				</form>
                     </div>
                     <iframe height=500px width="100%" src="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/gadgets/ifr?url=http://ec2-54-83-33-151.compute-1.amazonaws.com:9963/portal/gadgets/jenkins-emma-package-details/jenkins-emma-package-details.xml&onRemote=true&jenkinsURL={{other_continuousIntegration}}"></iframe>
                 </div>
             </div>
-            <div class="tab-pane active" id="tab-test">
+            <div class="tab-pane active"  id="tab-test">
                 <div class="content">
-                    <div style="text-align:center;"><a class="btn btn-default" target="_blank" href="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/QADashboard/index.jag?projectID={{other_qaportalProjectId}}"> Visit Code Coverage Dashboard </a>
+                    <div style="text-align:center;">
+			<form method="post" action="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/QADashboard/index.jag?projectID={{other_qaportalProjectId}}">
+				    <p>
+					<input type="hidden" name="AppMgtSAML2Response" value="{{appMSAMLResponse}}"/>
+					<button type="submit" class="btn btn-default" formtarget="_blank">Visit QA Dashboard</button>
+				    </p>
+			</form>
                     </div>
                     <iframe height=500px width="100%" src="https://ec2-54-83-33-151.compute-1.amazonaws.com:9643/gadgets/ifr?url=http://ec2-54-83-33-151.compute-1.amazonaws.com:9963/portal/gadgets/test-status/test-status.xml&onRemote=true&productId={{other_qaportalProjectId}}&productVersionId={{overview_name}}"></iframe>
                 </div>
