@@ -4,6 +4,14 @@
 
 var caramel;
 
+var appMSAMLResponse = request.getHeader('AppMgtSAML2Response');
+
+if(appMSAMLResponse!=null)
+{
+	session.put('APPM_SAML_RESPONSE',appMSAMLResponse);
+        response.sendRedirect('https://apps.private.wso2.com/devgovernance/1.0.0/acs?RelayState=https://apps.private.wso2.com/devgovernance/1.0.0');
+}
+
 require('/modules/store.js').exec(function (ctx) {
     var paging, count, current, loggedUser, manager, assets, length, recentDiff,
             popularDiff, recent, popular, type,

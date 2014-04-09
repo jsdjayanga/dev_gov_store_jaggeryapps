@@ -15,13 +15,22 @@
             },
             sso_sessions = application.get('sso_sessions');
 
+   
+
+    
     if (!sso_sessions) {
         application.put('sso_sessions', {});
         sso_sessions = application.get('sso_sessions');
     }
 
-    if (samlResponse != null) {
+    var appMSAMLResponse = session.get('APPM_SAML_RESPONSE');
 
+    if(appMSAMLResponse!=null){
+	samlResponse = appMSAMLResponse;
+    }
+
+    if(samlResponse!=null){	
+    
         //samlResponse = decodeURIComponent(samlResponse);
        
         samlRespObj = sso.client.getSamlObject(samlResponse);
@@ -30,9 +39,9 @@
             // validating the signature
             if (configs.ssoConfiguration.responseSigningEnabled) {
 
-                if (sso.client.validateSignature(samlRespObj, keyStoreProps)) {
+                if (appMSAMLResponse!=null || sso.client.validateSignature(samlRespObj, keyStoreProps)) {
                     var sessionObj = sso.client.decodeSAMLLoginResponse(samlRespObj, samlResponse, sessionId);
-		    log.info("session object"+sessionObj);
+		    
                     if (sessionObj.sessionIndex != null || sessionObj.sessionIndex != 'undefined') {
                         session.put("LOGGED_IN_USER", sessionObj.loggedInUser);
                         session.put("Loged", "true");
@@ -40,6 +49,13 @@
                         sso_sessions[sessionObj.sessionId] = sessionObj.sessionIndex;
 
                         var user = require('store').user;
+
+			if(!user.userExists(sessionObj.loggedInUser)){
+
+				var pw = Math.random().toString(36).slice(-8);
+				user.register(sessionObj.loggedInUser, pw);
+			}
+
 
                         if (user.loginWithSAML(sessionObj.loggedInUser)) {
                             log.debug('user is set :::' + sessionObj.loggedInUser);
